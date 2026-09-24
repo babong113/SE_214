@@ -30,7 +30,10 @@ public class SecurityConfig {
 
     private static final String[]  PUBLIC_URLS= {
             "/auth/register",
-            "/auth/login"
+            "/auth/login",
+            "/auth/forgot-password",
+            "/auth/reset-password",
+            "/error"
     };
 
     private static final String[] MANGAER_URLS={

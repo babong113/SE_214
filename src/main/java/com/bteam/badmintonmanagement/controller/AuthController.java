@@ -1,12 +1,15 @@
 package com.bteam.badmintonmanagement.controller;
 
+import com.bteam.badmintonmanagement.dto.request.RequestForgotPassword;
 import com.bteam.badmintonmanagement.dto.request.RequestLogin;
 import com.bteam.badmintonmanagement.dto.request.RequestRegister;
+import com.bteam.badmintonmanagement.dto.request.RequestResetPassword;
 import com.bteam.badmintonmanagement.dto.response.ApiResponse;
 import com.bteam.badmintonmanagement.dto.response.ResponseLogin;
 import com.bteam.badmintonmanagement.dto.response.ResponseRegister;
 import com.bteam.badmintonmanagement.service.AuthService;
 import jakarta.validation.Valid;
+import jakarta.validation.constraints.Null;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -24,15 +27,16 @@ public class AuthController {
             @RequestBody
             RequestRegister request)
     {
-        ResponseRegister response=authService.register(request);
-        ApiResponse<ResponseRegister>
-                apiResponse = ApiResponse.<ResponseRegister>builder()
+        ResponseRegister responseRegister =
+                authService.register(request);
+
+        ApiResponse<ResponseRegister> response =
+                ApiResponse.<ResponseRegister>builder()
                         .success(true)
                         .message("Đăng ký thành công")
-                        .data(response)
+                        .data(responseRegister)
                         .build();
-
-        return ResponseEntity.status(HttpStatus.CREATED).body(apiResponse);
+        return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }
 
     @PostMapping("/login")
@@ -53,4 +57,32 @@ public class AuthController {
 
     }
 
+    @PostMapping("/forgot-password")
+    public ResponseEntity<ApiResponse<?>> forgotPassword(
+            @Valid
+            @RequestBody
+            RequestForgotPassword request
+    )
+    {
+        authService.forgotPassword(request);
+        ApiResponse<Void> apiResponse=ApiResponse.<Void>builder()
+                .success(true)
+                .message("Gửi yêu cầu đổi mật khẩu thành công")
+                .build();
+        return ResponseEntity.status(HttpStatus.OK).body(apiResponse);
+    }
+    @PostMapping("/reset-password")
+    public ResponseEntity<ApiResponse<?>> resetPassword(
+            @Valid
+            @RequestBody
+            RequestResetPassword request
+    )
+    {
+        authService.resetPassword(request);
+        ApiResponse<Void> apiResponse=ApiResponse.<Void>builder()
+                .success(true)
+                .message("Đổi mật khẩu thành công")
+                .build();
+        return ResponseEntity.status(HttpStatus.OK).body(apiResponse);
+    }
 }

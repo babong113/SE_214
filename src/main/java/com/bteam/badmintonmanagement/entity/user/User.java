@@ -34,4 +34,7 @@ public class User {
 
     @Column(name = "status", nullable = false, length = 20)
     private String status;
+
+    @Column(name="reset_otp",nullable = true,length = 6)
+    private String resetOtp;
 }
